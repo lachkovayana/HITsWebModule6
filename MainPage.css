@@ -30,6 +30,12 @@ a {
   text-decoration: none;
   color: rgb(69, 68, 68);
 }
+a:hover{
+  color: #d1795e;
+}
+a:active {
+  color: #722b15; /* Цвет активной ссылки */ 
+ } 
 .list-counter-circle {
   list-style: none;
   counter-reset: list;
@@ -47,13 +53,9 @@ a {
   margin-bottom: 1rem;
   padding-left: 1rem;
   padding-right: 0.5rem;
-  color: #fff;
   background: #E0CFB1;
   white-space: nowrap;
   border-radius: 0.25rem;
-}
-.list-counter-circle > li:last-child {
-  margin-bottom: 0;
 }
 .list-counter-circle > li::before {
   content: counter(list);
