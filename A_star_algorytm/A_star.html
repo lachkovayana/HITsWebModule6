@@ -1,10 +1,29 @@
 <!DOCTYPE html>
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="A_star.css" />
     <title>Алгоритм A*</title>
 </head>
+
 <body>
-    
+    <h1>№1. Алгоритм А*</h1>
+    <div>
+        <p> Алгоритм поиска по первому наилучшему совпадению на графе, который находит маршрут с наименьшей стоимостью от начальной вершины  к другой .</p>
+        <p>В нашей реализации также применяется алгоритм /здесь будет название/ для создания лабиринта</p>
+    </div>
+    <div>
+        <form methpod="post" form ="action" display="inline">
+            <label for="maze_size" class = "forms">Введите размер лабиринта:</label>
+            <input type="number" min ="1" max="100"
+            name="maze_size" id="maze_size">
+            <button id = "launch_maze_creation"display="inline">Создать лабиринт</button>
+        </form>
+        
+    </div>
+    <script src="buckets.js"></script>
+    <script src="maze_generation.js"></script>
+    <script src="A_star_main.js"></script>
 </body>
+
 </html>
