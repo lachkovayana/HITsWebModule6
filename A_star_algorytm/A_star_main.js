@@ -2,9 +2,6 @@
 
 //const buckets = require("./buckets");
 
-//create beginning and end
-var beginPoint = map[0][4];
-var endPoint = map[8][4];
 //Нахождение эвристического пути
 function distance(somePoint) {
     let distance = Math.abs(endPoint.x - somePoint.x) + Math.abs(endPoint.y - somePoint.y);
@@ -37,8 +34,9 @@ function a_star() {
     let cx;
     let cy;
     let tentativeScore;
-    while (openList.isEmpty != true) {
-        let currentPoint = openList.removeRoot();
+    let currentPoint;
+    while (openList.isEmpty() != true) {
+        currentPoint = openList.removeRoot();
         if (currentPoint == endPoint) {
             return true;
         }
