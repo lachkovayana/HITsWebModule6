@@ -1,50 +1,4 @@
 "use strict"
-var n;
-function MazeCreation(e){
-    n = document.getElementById("maze_size").value; 
-    //Тут работа с созданием html объектов и их настройка в зависимости от карты
-//работаем с переменными CSS
-var root = document.querySelector(':root');
-root.style.setProperty("--sizeOfCell",700/n +"px");
-//работаем с section в body
-var mainObject = document.getElementById("mainField");
-mainObject.classList.add("lineSpace");
-var objectsArray = new Array(n);
-let nodeForMazeCreation;
-for (let i = 0; i < n; ++i) {
-    objectsArray[i] = document.createElement("div");
-    mainObject.appendChild(objectsArray[i]);
-    objectsArray[i].classList.add("string");
-    if (i == 0) {
-        nodeForMazeCreation = mainObject.getElementsByTagName("div")[0];
-    }
-    else {
-        nodeForMazeCreation = nodeForMazeCreation.nextSibling;
-    }
-    let arrayForNodes = new Array(n);
-    for (let j = 0; j < n; ++j) {
-        arrayForNodes[j] = document.createElement("p");
-        nodeForMazeCreation.appendChild(arrayForNodes[j]);
-    }
-}
-var cells = mainObject.getElementsByTagName("p");
-for (let i = 0; i < cells.length; ++i) {
-    cells[i].classList.add("cell1");
-    cells[i].classList.add("wall");
-    cells[i].classList.add("string");
-    cells[i].classList.add("onHover");
-}
-cells[n-1].classList.remove("wall");
-cells[n-1].classList.add("end");
-cells[n*(n-1)].classList.remove("wall");
-cells[n*(n-1)].classList.add("begin");
-document.getElementById("launch_maze_creation").setAttribute("disabled", "disabled");
-e.preventDefault()
-}
-document.getElementById("launch_maze_creation").onclick=MazeCreation;
-//
-//
-//
 //Генератор случайных чисел от min ДО(не ПО) max
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -66,112 +20,185 @@ function point(x, y, isWall) {
     this.parent;//из какой точки попали в эту
     this.isInOpenList = false;//проверка на наличие этой точки в открытом списке
     this.isConcidered = false;//проверка на наличие этой точки в списке рассматриваемых вершин
+    this.htmlObject;//связанный с этой клеткой html объект на странице
 }
-function PrimAlgorytm(){
-//creating map
-var map = new Array(n);
-for (let i = 0; i < n; ++i) {
-    map[i] = new Array(n);
-    for (let j = 0; j < n; ++j) {
-        map[i][j] = new point(i, j, true);
-    }
-}
-//список, в котором будут лежать рассматриваемые точки
-let consideredCells = buckets.LinkedList();
-
-//create beginning and end
-var beginPoint = map[0][0];
-beginPoint.isConcidered = true;
-var endPoint = map[n - 1][n - 1];
-
-beginPoint.isWall = false;
-var currentCell = beginPoint;
-consideredCells.add(map[currentCell.x + 2][currentCell.y]);
-map[currentCell.x + 2][currentCell.y].isConcidered = true;
-consideredCells.add(map[currentCell.x][currentCell.y + 2], getRandomInt(0, 2));
-map[currentCell.x][currentCell.y + 2].isConcidered = true;
-//неьлоьшой список для рассмотрения ближайших клеток без стен
-let nearestCells = buckets.LinkedList();
-let randomCell;
-//собственно сам генератор
-while (consideredCells.isEmpty() != true) {
-    randomCell = getRandomInt(0, consideredCells.size());
-    currentCell = consideredCells.elementAtIndex(randomCell);
-    consideredCells.removeElementAtIndex(randomCell);
-    //добавляем вершины в список рассматриваемых, или в список тех, к кому можно провести стену
-    if (currentCell.x - 2 >= 0) {
-        if (map[currentCell.x - 2][currentCell.y].isConcidered == false) {
-            consideredCells.add(map[currentCell.x - 2][currentCell.y]);
-            map[currentCell.x - 2][currentCell.y].isConcidered = true;
+//кол-во строк и столбцов
+var n;
+function MazeCreation(e) {
+    n = document.getElementById("maze_size").value;
+    //Тут работа с созданием html объектов и их настройка в зависимости от карты
+    //работаем с переменными CSS
+    var root = document.querySelector(':root');
+    root.style.setProperty("--sizeOfCell", 700 / n + "px");
+    //работаем с section в body
+    var mainObject = document.getElementById("mainField");
+    mainObject.classList.add("lineSpace");
+    var objectsArray = new Array(n);
+    let nodeForMazeCreation;
+    for (let i = 0; i < n; ++i) {
+        objectsArray[i] = document.createElement("div");
+        mainObject.appendChild(objectsArray[i]);
+        objectsArray[i].classList.add("string");
+        if (i == 0) {
+            nodeForMazeCreation = mainObject.getElementsByTagName("div")[0];
         }
         else {
-            if (map[currentCell.x - 2][currentCell.y].isWall == false)
-                nearestCells.add(map[currentCell.x - 1][currentCell.y]);
-
+            nodeForMazeCreation = nodeForMazeCreation.nextSibling;
+        }
+        let arrayForNodes = new Array(n);
+        for (let j = 0; j < n; ++j) {
+            arrayForNodes[j] = document.createElement("p");
+            nodeForMazeCreation.appendChild(arrayForNodes[j]);
         }
     }
-
-    if (currentCell.x + 2 < n) {
-        if (map[currentCell.x + 2][currentCell.y].isConcidered == false) {
-            consideredCells.add(map[currentCell.x + 2][currentCell.y]);
-            map[currentCell.x + 2][currentCell.y].isConcidered = true;
-        }
-        else {
-            if (map[currentCell.x + 2][currentCell.y].isWall == false)
-                nearestCells.add(map[currentCell.x + 1][currentCell.y]);
-
+    //создаю карту
+    var map = new Array(n);
+    for (let i = 0; i < n; ++i) {
+        map[i] = new Array(n);
+        for (let j = 0; j < n; ++j) {
+            map[i][j] = new point(i, j, true);
         }
     }
-
-    if (currentCell.y - 2 >= 0) {
-        if (map[currentCell.x][currentCell.y - 2].isConcidered == false) {
-            consideredCells.add(map[currentCell.x][currentCell.y - 2]);
-            map[currentCell.x][currentCell.y - 2].isConcidered = true;
-        }
-        else {
-            if (map[currentCell.x][currentCell.y - 2].isWall == false)
-                nearestCells.add(map[currentCell.x][currentCell.y - 1]);
-
+    //привязываю к карте объекты html
+    var cells = mainObject.getElementsByTagName("p");
+    let celLen = cells.length;
+    for (let i = 0; i < celLen; ++i) {
+        cells[i].classList.add("cell1");
+        cells[i].classList.add("string");
+        cells[i].classList.add("onHover");
+        //map[i % n][Math.floor(i / n)] = cells[i];
+    }
+    for (let i = 0;i<n;++i){
+        for (let j = 0;j<n;j++){
+            map[i][j].htmlObject=cells[celLen + i - n - j*n];
         }
     }
+    document.getElementById("launch_maze_creation").setAttribute("disabled", "disabled");
+    //после оперирования с html элементами начинается процесс создания лабриринта.
 
-    if (currentCell.y + 2 < n) {
-        if (map[currentCell.x][currentCell.y + 2].isConcidered == false) {
-            consideredCells.add(map[currentCell.x][currentCell.y + 2]);
-            map[currentCell.x][currentCell.y + 2].isConcidered = true;
+    //список, в котором будут лежать рассматриваемые точки
+    let consideredCells = buckets.LinkedList();
+
+    //create beginning and end
+    var beginPoint = map[0][0];
+    beginPoint.isConcidered = true;
+    var endPoint = map[n - 1][n - 1];
+    //для того, чтобы страница не обновлялась после создания
+    e.preventDefault()
+    //собственно тут сам алгоритм Прима
+
+    beginPoint.isWall = false;
+    var currentCell = beginPoint;
+    consideredCells.add(map[currentCell.x + 2][currentCell.y]);
+    map[currentCell.x + 2][currentCell.y].isConcidered = true;
+    consideredCells.add(map[currentCell.x][currentCell.y + 2], getRandomInt(0, 2));
+    map[currentCell.x][currentCell.y + 2].isConcidered = true;
+    //неьлоьшой список для рассмотрения ближайших клеток без стен
+    let nearestCells = buckets.LinkedList();
+    let randomCell;
+    //собственно сам генератор
+    while (consideredCells.isEmpty() != true) {
+        randomCell = getRandomInt(0, consideredCells.size());
+        currentCell = consideredCells.elementAtIndex(randomCell);
+        consideredCells.removeElementAtIndex(randomCell);
+        //добавляем вершины в список рассматриваемых, или в список тех, к кому можно провести стену
+        if (currentCell.x - 2 >= 0) {
+            if (map[currentCell.x - 2][currentCell.y].isConcidered == false) {
+                consideredCells.add(map[currentCell.x - 2][currentCell.y]);
+                map[currentCell.x - 2][currentCell.y].isConcidered = true;
+            }
+            else {
+                if (map[currentCell.x - 2][currentCell.y].isWall == false)
+                    nearestCells.add(map[currentCell.x - 1][currentCell.y]);
+
+            }
         }
-        else {
-            if (map[currentCell.x][currentCell.y + 2].isWall == false)
-                nearestCells.add(map[currentCell.x][currentCell.y + 1]);
 
+        if (currentCell.x + 2 < n) {
+            if (map[currentCell.x + 2][currentCell.y].isConcidered == false) {
+                consideredCells.add(map[currentCell.x + 2][currentCell.y]);
+                map[currentCell.x + 2][currentCell.y].isConcidered = true;
+            }
+            else {
+                if (map[currentCell.x + 2][currentCell.y].isWall == false)
+                    nearestCells.add(map[currentCell.x + 1][currentCell.y]);
+
+            }
+        }
+
+        if (currentCell.y - 2 >= 0) {
+            if (map[currentCell.x][currentCell.y - 2].isConcidered == false) {
+                consideredCells.add(map[currentCell.x][currentCell.y - 2]);
+                map[currentCell.x][currentCell.y - 2].isConcidered = true;
+            }
+            else {
+                if (map[currentCell.x][currentCell.y - 2].isWall == false)
+                    nearestCells.add(map[currentCell.x][currentCell.y - 1]);
+
+            }
+        }
+
+        if (currentCell.y + 2 < n) {
+            if (map[currentCell.x][currentCell.y + 2].isConcidered == false) {
+                consideredCells.add(map[currentCell.x][currentCell.y + 2]);
+                map[currentCell.x][currentCell.y + 2].isConcidered = true;
+            }
+            else {
+                if (map[currentCell.x][currentCell.y + 2].isWall == false)
+                    nearestCells.add(map[currentCell.x][currentCell.y + 1]);
+
+            }
+        }
+        //делаем текущую клетку свободной и слчайную из тех, кто рядом со свободной стеной
+        currentCell.isWall = false;
+        nearestCells.elementAtIndex(getRandomInt(0, nearestCells.size())).isWall = false;
+        nearestCells.clear();
+    }
+    //Так как алгоритм Прима создает горизонтальную и вертикальную сплошную стену при n четном, усовершенствуем его немного
+    if (n % 2 == 0) {
+        endPoint.isWall = false;
+        let randomVar = getRandomInt(0, 2);
+        if (randomVar == 1)
+            map[n - 2][n - 1].isWall = false;
+        else
+            map[n - 1][n - 2].isWall = false;
+        for (let i = 0; i < n - 2; i += 2) {
+            randomVar = getRandomInt(0, 5);
+            if (randomVar % 2 == 1)
+                map[i][n - 1].isWall = false;
+        }
+        for (let i = 0; i < n - 2; i += 2) {
+            randomVar = getRandomInt(0, 5);
+            if (randomVar % 2 == 1)
+                map[n - 1][i].isWall = false;
         }
     }
-    //делаем текущую клетку свободной и слчайную из тех, кто рядом со свободной стеной
-    currentCell.isWall = false;
-    nearestCells.elementAtIndex(getRandomInt(0, nearestCells.size())).isWall = false;
-    nearestCells.clear();
+    //делаем сязь между созданным лабиринтом и html элементами
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < n; ++j) {
+            if (map[i][j].isWall == true) {
+                map[i][j].htmlObject.classList.add("wall");
+            }
+            else {
+                map[i][j].htmlObject.classList.add("notWall");
+            }
+        }
+    }
+    beginPoint.htmlObject.classList.remove("notWall");
+    endPoint.htmlObject.classList.remove("notWall");
+    beginPoint.htmlObject.classList.add("begin");
+    endPoint.htmlObject.classList.add("end");
 }
-//Так как алгоритм Прима создает горизонтальную и вертикальную сплошную стену при n четном, усовершенствуем его немного
-if (n % 2 == 0) {
-    endPoint.isWall = false;
-    let randomVar = getRandomInt(0, 2);
-    if (randomVar == 1)
-        map[n - 2][n - 1].isWall = false;
-    else
-        map[n - 1][n - 2].isWall = false;
-    for(let i =0;i<n-2;i+=2)
-    {
-        randomVar = getRandomInt(0, 5);
-        if(randomVar%2==1)
-        map[i][n-1].isWall = false;
-    }
-    for(let i =0;i<n-2;i+=2)
-    {
-        randomVar = getRandomInt(0, 5);
-        if(randomVar%2==1)
-        map[n-1][i].isWall = false;
-    }
-}
+///////////////
+//
+//
+document.getElementById("launch_maze_creation").onclick = MazeCreation;
+//
+//
+//////////////
+
+
+function PrimAlgorytm() {
 }
 
 
