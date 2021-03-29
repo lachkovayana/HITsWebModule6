@@ -7,18 +7,18 @@ function distance(somePoint) {
     let distance = Math.abs(endPoint.x - somePoint.x) + Math.abs(endPoint.y - somePoint.y);
     return distance;
 }
-//Забиваем значение эвр.пути длч каждой вершины
-for (let i = 0; i < n; ++i) {
-    for (let j = 0; j < n; ++j) {
-        map[i][j].h = distance(map[i][j]);
-    }
-}
 //Переменная, показывающая существование пути, длина диагонального и ортогонального перехода
 var pathIsExist;
 var ortLength = 10;
 var diagLength = 14;
 //собственно сам алгоритм
 function a_star() {
+    //Забиваем значение эвр.пути длч каждой вершины
+for (let i = 0; i < n; ++i) {
+    for (let j = 0; j < n; ++j) {
+        map[i][j].h = distance(map[i][j]);
+    }
+}
     //настраиваем функцию сравнения в открытой куче
     var openList = buckets.Heap(function (a, b) {
         if (a.h + a.g < b.g + b.h) {
@@ -86,7 +86,7 @@ function a_star() {
     return false;
 }
 
-pathIsExist = a_star();
+//pathIsExist = a_star();
 function getPath() {
     if (pathIsExist == false) {
         console.log("Пути не существует");
@@ -104,4 +104,4 @@ function getPath() {
         console.log(fullPath.peek().x, fullPath.pop().y);
     }
 }
-getPath();
+//getPath();

@@ -1,11 +1,11 @@
 "use strict"
-//тестовая карта 9 на 9
-var n = 200;
-//Тут работа с созданием html объектов и их настройка в зависимости от карты
+var n;
+function MazeCreation(e){
+    n = document.getElementById("maze_size").value; 
+    //Тут работа с созданием html объектов и их настройка в зависимости от карты
 //работаем с переменными CSS
 var root = document.querySelector(':root');
 root.style.setProperty("--sizeOfCell",700/n +"px");
-root.style.setProperty("--borderSize",700/n +"px");
 //работаем с section в body
 var mainObject = document.getElementById("mainField");
 mainObject.classList.add("lineSpace");
@@ -38,6 +38,10 @@ cells[n-1].classList.remove("wall");
 cells[n-1].classList.add("end");
 cells[n*(n-1)].classList.remove("wall");
 cells[n*(n-1)].classList.add("begin");
+document.getElementById("launch_maze_creation").setAttribute("disabled", "disabled");
+e.preventDefault()
+}
+document.getElementById("launch_maze_creation").onclick=MazeCreation;
 //
 //
 //
@@ -63,9 +67,9 @@ function point(x, y, isWall) {
     this.isInOpenList = false;//проверка на наличие этой точки в открытом списке
     this.isConcidered = false;//проверка на наличие этой точки в списке рассматриваемых вершин
 }
-
+function PrimAlgorytm(){
 //creating map
-let map = new Array(n);
+var map = new Array(n);
 for (let i = 0; i < n; ++i) {
     map[i] = new Array(n);
     for (let j = 0; j < n; ++j) {
@@ -73,7 +77,7 @@ for (let i = 0; i < n; ++i) {
     }
 }
 //список, в котором будут лежать рассматриваемые точки
-var consideredCells = buckets.LinkedList();
+let consideredCells = buckets.LinkedList();
 
 //create beginning and end
 var beginPoint = map[0][0];
@@ -168,6 +172,11 @@ if (n % 2 == 0) {
         map[n-1][i].isWall = false;
     }
 }
+}
+
+
+
+
 //тут должен быть вывод
 // function printMaze(){
 //     for(let i = 0;i<n;++i)
