@@ -1,3 +1,44 @@
+:root{
+  --sizeOfCell:6px;
+  --borderSize:6px;
+}
+.cell1{
+height: var(--sizeOfCell, 6px);
+width: var(--sizeOfCell, 6px);
+margin:0;
+padding:0;
+border: 0;
+}
+#mainField{
+  
+  border:var(--borderSize,6px) solid black;
+  display: inline-block;
+  padding: 0;
+  height: 700px;
+  width:700px;
+}
+.begin{
+  background-color:firebrick;
+  }
+.end{
+      background-color: blue;
+}
+.wall{
+      background-color: black;
+}
+.notWall{
+  background-color: azure;
+}
+.string{
+  display: inline-block;
+  line-height: 0;
+}
+.onHover:hover{
+      opacity: 80%;
+}
+.lineSpace{
+      line-height: 0;
+  }
 h1{
   font-size: 45px;
   font-family: cursive;
@@ -7,16 +48,11 @@ h1{
     2px 2px #757575, 2.5px 2.5px #707070, 3px 3px #6b6b6b, 3.5px 3.5px #666666,
     4px 4px #757575, 4.5px 4.5px #707070, 5px 5px #6b6b6b, 5.5px 5.5px #666666;
 }
-p{
+.text{
   font-size: 20px;
   font-family: cursive;
   color: #5f3528;
 }
- .forms {
-  font-size: 20px;
-  font-family: cursive;
-  color: #5f3528;
-} 
 #launch_maze_creation{text-decoration:none; text-align:center; 
   padding:4px 12px; 
   border:solid 1px #000000; 

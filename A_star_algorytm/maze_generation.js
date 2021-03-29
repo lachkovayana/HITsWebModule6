@@ -1,5 +1,46 @@
 "use strict"
-
+//тестовая карта 9 на 9
+var n = 200;
+//Тут работа с созданием html объектов и их настройка в зависимости от карты
+//работаем с переменными CSS
+var root = document.querySelector(':root');
+root.style.setProperty("--sizeOfCell",700/n +"px");
+root.style.setProperty("--borderSize",700/n +"px");
+//работаем с section в body
+var mainObject = document.getElementById("mainField");
+mainObject.classList.add("lineSpace");
+var objectsArray = new Array(n);
+let nodeForMazeCreation;
+for (let i = 0; i < n; ++i) {
+    objectsArray[i] = document.createElement("div");
+    mainObject.appendChild(objectsArray[i]);
+    objectsArray[i].classList.add("string");
+    if (i == 0) {
+        nodeForMazeCreation = mainObject.getElementsByTagName("div")[0];
+    }
+    else {
+        nodeForMazeCreation = nodeForMazeCreation.nextSibling;
+    }
+    let arrayForNodes = new Array(n);
+    for (let j = 0; j < n; ++j) {
+        arrayForNodes[j] = document.createElement("p");
+        nodeForMazeCreation.appendChild(arrayForNodes[j]);
+    }
+}
+var cells = mainObject.getElementsByTagName("p");
+for (let i = 0; i < cells.length; ++i) {
+    cells[i].classList.add("cell1");
+    cells[i].classList.add("wall");
+    cells[i].classList.add("string");
+    cells[i].classList.add("onHover");
+}
+cells[n-1].classList.remove("wall");
+cells[n-1].classList.add("end");
+cells[n*(n-1)].classList.remove("wall");
+cells[n*(n-1)].classList.add("begin");
+//
+//
+//
 //Генератор случайных чисел от min ДО(не ПО) max
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -22,8 +63,7 @@ function point(x, y, isWall) {
     this.isInOpenList = false;//проверка на наличие этой точки в открытом списке
     this.isConcidered = false;//проверка на наличие этой точки в списке рассматриваемых вершин
 }
-//тестовая карта 9 на 9
-var n = 10;
+
 //creating map
 let map = new Array(n);
 for (let i = 0; i < n; ++i) {
