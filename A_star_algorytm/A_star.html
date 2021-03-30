@@ -13,11 +13,18 @@
         <p class="text">В нашей реализации также применяется алгоритм Прима для создания лабиринта</p>
     </div>
     <div>
+       
         <form methpod="post" form ="action" display="inline">
-            <label for="maze_size" class = "text">Введите размер лабиринта:</label>
-            <input type="number" min ="3" max="100"
+            <label for="maze_size" class = "text">Введите размер карты:</label>
+            <input type="number" min ="3" max="1000"
             name="maze_size" id="maze_size">
-            <button id = "launch_maze_creation"display="inline" >Создать лабиринт</button>
+            <select id="map_form_selection" >
+                <option value="1">Пустая карта</option>
+                <option value="2">Лабиринт</option>
+                <option value="3">Пещеры</option>
+            </select>
+            <button id = "launch_maze_creation" class = "buttons" display="inline" >Создать карту</button>
+            <button id = "launch_A_star" class = "buttons" display="inline" >Найти путь</button>
         </form>
         
     </div>
