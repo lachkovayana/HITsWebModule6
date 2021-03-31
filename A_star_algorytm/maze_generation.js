@@ -409,7 +409,7 @@ function CaveCreation(e) {
             map[i][j].htmlObject = cells[celLen + i - n - j * n];
         }
     }
-    document.getElementById("launch_maze_creation").setAttribute("disabled");
+    document.getElementById("launch_maze_creation").setAttribute("disabled","disabled");
     //после оперирования с html элементами начинается процесс создания лабриринта.
 
     //список, в котором будут лежать рассматриваемые точки
