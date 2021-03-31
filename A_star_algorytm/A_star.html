@@ -9,29 +9,36 @@
 <body>
     <h1>№1. Алгоритм А*</h1>
     <div>
-        <p class="text"> Алгоритм поиска по первому наилучшему совпадению на графе, который находит маршрут с наименьшей стоимостью от начальной вершины  к другой .</p>
+        <p class="text"> Алгоритм поиска по первому наилучшему совпадению на графе, который находит маршрут с наименьшей
+            стоимостью от начальной вершины к другой .</p>
         <p class="text">В нашей реализации также применяется алгоритм Прима для создания лабиринта</p>
     </div>
     <div>
-       
-        <form methpod="post" form ="action" display="inline">
-            <label for="maze_size" class = "text">Введите размер карты:</label>
-            <input type="number" min ="3" max="1000"
-            name="maze_size" id="maze_size">
-            <select id="map_form_selection" >
+        <form methpod="post" form="action" display="inline">
+            <label for="maze_size" class="text">Введите размер карты:</label>
+            <input type="number" min="3" max="300" name="maze_size" id="maze_size">
+            <select id="map_form_selection">
                 <option value="1">Пустая карта</option>
                 <option value="2">Лабиринт</option>
                 <option value="3">Пещеры</option>
             </select>
-            <button id = "launch_maze_creation" class = "buttons" display="inline" >Создать карту</button>
-            <button id = "launch_A_star" class = "buttons" display="inline" >Найти путь</button>
+            <button id="launch_maze_creation" class="buttons" display="inline">Создать карту</button>
+            <button id="launch_A_star" class="buttons" display="inline">Найти путь</button>
         </form>
-        
+        <form methpod="post" form="action" display="inline">
+            <label for="control_panel" class ="text">Нажмите на клетку карты, чтобы сделать её:</label>
+            <select id="control_panel" disabled="disabled">
+                <option value="0">-</option>
+                <option value="1">Началом</option>
+                <option value="2">Концом</option>
+                <option value="3">Пустой клеткой</option>
+                <option value="4">Стеной</option>
+            </select>
+        </form>
     </div>
-    <section id ="mainField"></section>
+    <section id="mainField"></section>
     <script src="buckets.js"></script>
     <script src="maze_generation.js"></script>
-    <script src="A_star_main.js"></script>
 </body>
 
 </html>

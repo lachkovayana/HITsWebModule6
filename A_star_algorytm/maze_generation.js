@@ -28,12 +28,92 @@ function point(x, y, isWall) {
     this.isConcidered = false;//проверка на наличие этой точки в списке рассматриваемых вершин
     this.htmlObject;//связанный с этой клеткой html объект на странице
 }
+//Функция для изменения клетки при нажатии
+function ifClicked(mapObject) {
+    if (document.getElementById("control_panel").hasAttribute("disabled"))
+        return;
+    let formOfAction = document.getElementById("control_panel").value;
+    if (formOfAction == 0) {
+    }
+    if (formOfAction == 1) {
+        if (mapObject.isWall == true) {
+            alert("Cтену нельзя сделать началом");
+        }
+        else {
+            if (mapObject == endPoint) {
+                alert("Нельзя точку конца сделать точкой начала");
+            }
+            else {
+                beginPoint.htmlObject.classList.remove("begin");
+                beginPoint.htmlObject.classList.add("notWall");
+                mapObject.htmlObject.classList.remove("notWall");
+                mapObject.htmlObject.classList.add("begin");
+                beginPoint = mapObject;
+            }
+
+        }
+    }
+    if (formOfAction == 2) {
+        if (mapObject.isWall == mapObject) {
+            alert("Cтену нельзя сделать концом");
+        }
+        else {
+            if (mapObject == beginPoint) {
+                alert("Нельзя точку начала сделать точкой конца");
+            }
+            else {
+                endPoint.htmlObject.classList.remove("end");
+                endPoint.htmlObject.classList.add("notWall");
+                mapObject.htmlObject.classList.remove("notWall");
+                mapObject.htmlObject.classList.add("end");
+                endPoint = mapObject;
+            }
+        }
+    }
+    if (formOfAction == 3) {
+        if (mapObject.isWall == true) {
+            mapObject.isWall = false;
+            mapObject.htmlObject.classList.remove("wall");
+            mapObject.htmlObject.classList.add("notWall");
+        }
+    }
+    if (formOfAction == 4) {
+        if (mapObject == beginPoint) {
+            alert("Нельзя точку начала сделать стеной");
+            return;
+        }
+        if (mapObject == endPoint) {
+            alert("Нельзя точку конца сделать стеной");
+            return;
+        }
+        if (mapObject.isWall == false) {
+            mapObject.isWall = true;
+            mapObject.htmlObject.classList.remove("notWall");
+            mapObject.htmlObject.classList.add("wall");
+        }
+    }
+}
+function allowChanging() {
+    for (let i = 0; i < n; ++i) {
+        for (let j = 0; j < n; ++j) {
+            map[i][j].htmlObject.onclick = function () { ifClicked(map[i][j]) };
+        }
+    }
+}
 //кол-во строк и столбцов
 /////////////////////////////////////////////////////////////////////////////////////////////////////////генерация пустой карты
 function blankMapCreation(e) {
+    n = document.getElementById("maze_size").value;
+    if (n < 3) {
+        alert("Слишком маленький размер");
+        return;
+    }
+    if (n > 300) {
+        alert("Слишком большой размер");
+        return;
+    }
     document.getElementById("launch_maze_creation").setAttribute("disabled", "disabled");
     changesArePossible = true;
-    n = document.getElementById("maze_size").value;
     //Тут работа с созданием html объектов и их настройка в зависимости от карты
     //работаем с переменными CSS
     var root = document.querySelector(':root');
@@ -91,11 +171,21 @@ function blankMapCreation(e) {
     endPoint.htmlObject.classList.add("end");
     //добавляем возможность нажать на 2 кнопку
     document.getElementById("launch_A_star").removeAttribute("disabled");
+    document.getElementById("control_panel").removeAttribute("disabled", "disabled");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////генерация лабиринта
 function MazeCreation(e) {
-    changesArePossible = true;
     n = document.getElementById("maze_size").value;
+    n = document.getElementById("maze_size").value;
+    if (n < 3) {
+        alert("Слишком маленький размер");
+        return;
+    }
+    if (n > 300) {
+        alert("Слишком большой размер");
+        return;
+    }
+    changesArePossible = true;
     //Тут работа с созданием html объектов и их настройка в зависимости от карты
     //работаем с переменными CSS
     var root = document.querySelector(':root');
@@ -258,11 +348,20 @@ function MazeCreation(e) {
     endPoint.htmlObject.classList.add("end");
     //добавляем возможность нажать на 2 кнопку
     document.getElementById("launch_A_star").removeAttribute("disabled");
+    document.getElementById("control_panel").removeAttribute("disabled");
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Создание пещеры
 function CaveCreation(e) {
-    changesArePossible = true;
     n = document.getElementById("maze_size").value;
+    if (n < 3) {
+        alert("Слишком маленький размер");
+        return;
+    }
+    if (n > 300) {
+        alert("Слишком большой размер");
+        return;
+    }
+    changesArePossible = true;
     //Тут работа с созданием html объектов и их настройка в зависимости от карты
     //работаем с переменными CSS
     var root = document.querySelector(':root');
@@ -310,7 +409,7 @@ function CaveCreation(e) {
             map[i][j].htmlObject = cells[celLen + i - n - j * n];
         }
     }
-    document.getElementById("launch_maze_creation").setAttribute("disabled", "disabled");
+    document.getElementById("launch_maze_creation").setAttribute("disabled");
     //после оперирования с html элементами начинается процесс создания лабриринта.
 
     //список, в котором будут лежать рассматриваемые точки
@@ -505,6 +604,7 @@ function CaveCreation(e) {
     endPoint.htmlObject.classList.add("end");
     //добавляем возможность нажать на 2 кнопку
     document.getElementById("launch_A_star").removeAttribute("disabled");
+    document.getElementById("control_panel").removeAttribute("disabled");
 }
 ///////////////
 //
@@ -521,6 +621,7 @@ function clicking() {
             CaveCreation();
         }
     }
+    allowChanging();
 }
 document.getElementById("launch_maze_creation").onclick = clicking;
 //
@@ -633,9 +734,10 @@ function getPath() {
     }
 }
 function A_star_launch(e) {
+    document.getElementById("launch_A_star").setAttribute("disabled", "disabled");
+    document.getElementById("control_panel").setAttribute("disabled", "disabled");
     pathIsExist = a_star();
     getPath();
-    document.getElementById("launch_A_star").setAttribute("disabled", "disabled");
     e.preventDefault()
 }
 ///////////////
