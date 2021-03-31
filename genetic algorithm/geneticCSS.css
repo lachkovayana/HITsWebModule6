@@ -13,7 +13,7 @@ body {
     width: 600px;
     height: 600px;
     margin: 50px;
-    position: fixed;
+    position: absolute;
 }
 
 #options {
@@ -44,6 +44,6 @@ h2 {
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    position: fixed;
+    position: absolute;
     cursor: pointer;
 }
