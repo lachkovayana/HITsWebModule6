@@ -22,8 +22,8 @@ document.getElementById('add').onclick = function() {
         clearCanvas();
 
         let coordinates = {
-            x: event.clientX - 62,
-            y: event.clientY - 62
+            x: event.clientX - 379,
+            y: event.clientY  - 73
         };
 
         let element = document.createElement('div');
@@ -176,7 +176,11 @@ function weightOfPathIs(nodes, path) {
 // скрещивание двух генов
 function crossover(array1, array2) {
     let firstPoint = Math.floor(Math.random() * (array1.length - 1) + 1);
-    let lastPoint = Math.floor(Math.random() * (array1.length - firstPoint) + firstPoint)
+    let lastPoint;
+
+    do {
+        Math.floor(Math.random() * (array1.length - firstPoint) + firstPoint)
+    } while (lastPoint == firstPoint)
 
     let newArray1 = array1.slice(firstPoint, lastPoint); 
 
@@ -196,8 +200,8 @@ function crossover(array1, array2) {
 function mutation(array, rate) {
     for (let i=0; i< array.length; i++) {
         if (Math.random() < rate) {
-            let indexFirst = Math.floor(Math.random() * (array.length-1 - 1) + 1);
-            let indexSecond = Math.floor(Math.random() * (array.length-1 - 1) + 1);
+            let indexFirst = Math.floor(Math.random() * (array.length-1-1)+1);
+            let indexSecond = Math.floor(Math.random() * (array.length-1-1)+1);
             let tmp = array[indexFirst];
             array[indexFirst] = array[indexSecond];
             array[indexSecond] = tmp;
@@ -207,31 +211,8 @@ function mutation(array, rate) {
     return array;
 }
 
-// прорисовка рёбер
-function drawLines(bestGene) {
-    let size = bestGene.length;
-    let startPoint = {
-        x: parseInt(document.getElementById(`${bestGene[0]}`).style.left) + 11,
-        y: parseInt(document.getElementById(`${bestGene[0]}`).style.top) + 11
-    };
-
-    context.beginPath();
-    context.moveTo(startPoint.x, startPoint.y);
-
-    for (let i=1; i<size; i++) {
-        let nextPoint = {
-            x: parseInt(document.getElementById(`${bestGene[i]}`).style.left) + 11,
-            y: parseInt(document.getElementById(`${bestGene[i]}`).style.top) + 11
-        };
-        context.lineTo(nextPoint.x, nextPoint.y);
-    }
-    
-    context.strokeStyle = '#290054';
-    context.lineWidth = 3;
-    context.stroke();
-}
-
-function iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGeneration, maxNumOfGenerations) {
+// итерация выполнения алгоритма
+function iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGeneration, lastBestGene) {
     
     let tmpPopulation = [];
 
@@ -265,30 +246,63 @@ function iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGener
 
     if (population[0].weight < bestGeneEver.weight) {
         bestGeneEver = population[0];
+        lastBestGene = numOfGeneration;
         clearCanvas();
-        drawLines(bestGeneEver.path);
+        drawLines(bestGeneEver.path, false);
+        console.log(bestGeneEver);
 
-        if (numOfGeneration <= maxNumOfGenerations) {
+        if (numOfGeneration - lastBestGene <= 500) {
             setTimeout(() => iteration(population, bestGeneEver, sizeOfPopulation, nodes, 
-                numOfGeneration + 1, maxNumOfGenerations), 100);
+                numOfGeneration+1, lastBestGene), 100);
         }
-    } else if (numOfGeneration <= maxNumOfGenerations) {
+    } else if (numOfGeneration - lastBestGene <= 500) {
         iteration(population, bestGeneEver, sizeOfPopulation, nodes, 
-            numOfGeneration + 1, maxNumOfGenerations);
+            numOfGeneration+1, lastBestGene);
     } else {
+        clearCanvas();
+        drawLines(bestGeneEver.path, true);
         return;
     }
 }
 
+// прорисовка рёбер
+function drawLines(bestGene, flag) {
+    let size = bestGene.length;
+    let startPoint = {
+        x: parseInt(document.getElementById(`${bestGene[0]}`).style.left) + 11,
+        y: parseInt(document.getElementById(`${bestGene[0]}`).style.top) + 11
+    };
+
+    context.beginPath();
+    context.moveTo(startPoint.x, startPoint.y);
+
+    for (let i=1; i<size; i++) {
+        let nextPoint = {
+            x: parseInt(document.getElementById(`${bestGene[i]}`).style.left) + 11,
+            y: parseInt(document.getElementById(`${bestGene[i]}`).style.top) + 11
+        };
+        context.lineTo(nextPoint.x, nextPoint.y);
+    }
+    
+    if (!flag)
+    {
+        context.strokeStyle = '#4f4f4f';
+    } else {
+        context.strokeStyle = '#b50000';
+    }
+    context.lineWidth = 3;
+    context.stroke();
+}
+
 function travellingSalesmanProblem(nodes) {
     let numOfGeneration = 1; // счётчик поколений
-    let maxNumOfGenerations = 1000; // максимальное количество поколений
+    //let maxNumOfGenerations = 2000; // максимальное количество поколений
 
     let bestGeneEver = new structOfGen([], Number.MAX_SAFE_INTEGER);
     
-    //let bestGeneCounter = 0;
+    let lastBestGene = 1;
 
-    let sizeOfPopulation = nodes.length*2; // размер популяции
+    let sizeOfPopulation = nodes.length; // размер популяции
     let population = []; // создание популяции (массив с маршрутами и их весами)
     
     for (let i=0; i<sizeOfPopulation; i++) {
@@ -299,12 +313,14 @@ function travellingSalesmanProblem(nodes) {
             bestGeneEver.path = randPath;
         }
         population.push(new structOfGen(randPath, weightOfPath)); // внесение данных в популяцию
-    } //bestGeneCounter++;
+    }
 
     clearCanvas();
-    drawLines(bestGeneEver.path);
+    if (nodes.length > 2) {
+        drawLines(bestGeneEver.path, false);
+    } else {
+        drawLines(bestGeneEver.path, true);
+    }
 
-    iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGeneration, maxNumOfGenerations);
-
-    console.log(bestGeneEver);
+    iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGeneration, lastBestGene);
 }
