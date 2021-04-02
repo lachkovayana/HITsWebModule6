@@ -4,10 +4,15 @@ var map;
 var beginPoint;
 var endPoint;
 var changesArePossible = false;
+var movementSpeed;
 document.getElementById("launch_A_star").setAttribute("disabled", "disabled");
 //Генератор случайных чисел от min ДО(не ПО) max
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+function coordinates(x, y) {
+    this.x = x;
+    this.y = y;
 }
 //структура точки
 function point(x, y, isWall) {
@@ -409,7 +414,7 @@ function CaveCreation(e) {
             map[i][j].htmlObject = cells[celLen + i - n - j * n];
         }
     }
-    document.getElementById("launch_maze_creation").setAttribute("disabled","disabled");
+    document.getElementById("launch_maze_creation").setAttribute("disabled", "disabled");
     //после оперирования с html элементами начинается процесс создания лабриринта.
 
     //список, в котором будут лежать рассматриваемые точки
@@ -629,15 +634,20 @@ document.getElementById("launch_maze_creation").onclick = clicking;
 //////////////
 //Нахождение эвристического пути
 function distance(somePoint) {
-    let distance = Math.abs(endPoint.x - somePoint.x) + Math.abs(endPoint.y - somePoint.y);
+    let distance = Math.abs(endPoint.x - somePoint.x) * 10 + Math.abs(endPoint.y - somePoint.y) * 10;
     return distance;
 }
 //Переменная, показывающая существование пути, длина диагонального и ортогонального перехода
 var pathIsExist;
 var ortLength = 10;
 var diagLength = 14;
+var timeCounter;
+var queueForAnimationX = buckets.Queue();
+var queueForAnimationY = buckets.Queue();
+var openList;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////собственно сам алгоритм
 function a_star() {
+    movementSpeed=500/n;
     //Забиваем значение эвр.пути длч каждой вершины
     for (let i = 0; i < n; ++i) {
         for (let j = 0; j < n; ++j) {
@@ -645,7 +655,7 @@ function a_star() {
         }
     }
     //настраиваем функцию сравнения в открытой куче
-    var openList = buckets.Heap(function (a, b) {
+    openList = buckets.Heap(function (a, b) {
         if (a.h + a.g < b.g + b.h) {
             return -1;
         }
@@ -660,13 +670,28 @@ function a_star() {
     let cy;
     let tentativeScore;
     let currentPoint;
+    timeCounter = 0;
     while (openList.isEmpty() != true) {
+        if (currentPoint !== undefined && currentPoint!=beginPoint) {
+            queueForAnimationX.add(currentPoint.x);
+            queueForAnimationY.add(currentPoint.y);
+            setTimeout(function () {
+                map[queueForAnimationX.peek()][queueForAnimationY.peek()].htmlObject.classList.remove("currentPoint");
+                map[queueForAnimationX.dequeue()][queueForAnimationY.dequeue()].htmlObject.classList.add("notWall");
+            }, timeCounter * movementSpeed);
+            ++timeCounter;
+        }
         currentPoint = openList.removeRoot();
+        queueForAnimationX.add(currentPoint.x);
+        queueForAnimationY.add(currentPoint.y);
+        setTimeout(function () {
+            map[queueForAnimationX.peek()][queueForAnimationY.peek()].htmlObject.classList.remove("consideredPoint");
+            map[queueForAnimationX.dequeue()][queueForAnimationY.dequeue()].htmlObject.classList.add("currentPoint");
+        }, timeCounter * movementSpeed);
+        ++timeCounter;
         if (currentPoint == endPoint) {
             return true;
         }
-        currentPoint.htmlObject.classList.remove("concederdPoint");
-        currentPoint.htmlObject.classList.add("currentPoint");
         currentPoint.isVisited = true;
         currentPoint.isInOpenList = false;
         cx = currentPoint.x;
@@ -704,20 +729,42 @@ function a_star() {
                     if (map[cx + i][cy + j].isInOpenList == false) {
                         map[cx + i][cy + j].isInOpenList = true;
                         openList.add(map[cx + i][cy + j]);
-                        map[cx + i][cy + j].htmlObject.classList.add("concederedPoint");
+                        queueForAnimationX.add(cx + i);
+                        queueForAnimationY.add(cy + j);
+                        setTimeout(function () {
+                            map[queueForAnimationX.peek()][queueForAnimationY.peek()].htmlObject.classList.remove("notWall");
+                            map[queueForAnimationX.dequeue()][queueForAnimationY.dequeue()].htmlObject.classList.add("consideredPoint");
+                        }, timeCounter * movementSpeed);
+                        ++timeCounter;
                     }
                 }
 
             }
         }
-        currentPoint.htmlObject.classList.remove("currentPoint");
     }
     return false;
+}
+function cleanMap() {
+    
+    let openListSize = openList.size();
+    let cleaner;
+    for (let i = 0; i < openListSize; ++i) {
+        cleaner = openList.removeRoot();
+        queueForAnimationX.add(cleaner.x);
+        queueForAnimationY.add(cleaner.y);
+        setTimeout(function () {
+            map[queueForAnimationX.peek()][queueForAnimationY.peek()].htmlObject.classList.remove("consideredPoint");
+            map[queueForAnimationX.dequeue()][queueForAnimationY.dequeue()].htmlObject.classList.add("notWall");
+        }, timeCounter * movementSpeed);
+        ++timeCounter;
+    }
 }
 //Функция нахождения пути
 function getPath() {
     if (pathIsExist == false) {
-        alert("Пути не существует");
+        setTimeout(function () {
+            alert("Пути не существует");
+        }, timeCounter * movementSpeed);
         return;
     }
     let currentPoint = endPoint.parent;
@@ -728,10 +775,13 @@ function getPath() {
         currentPoint = currentPoint.parent;
     }
     let sizeOfStack = fullPath.size();
-    for (let i = 0; i < sizeOfStack; ++i) {
-        fullPath.peek().htmlObject.classList.remove("notWall");
-        fullPath.pop().htmlObject.classList.add("path");
+    for (let i = timeCounter; i < sizeOfStack + timeCounter; ++i) {
+        setTimeout(function () {
+            fullPath.peek().htmlObject.classList.remove("notWall");
+            fullPath.pop().htmlObject.classList.add("path");
+        }, i * movementSpeed);
     }
+    cleanMap();
 }
 function A_star_launch(e) {
     document.getElementById("launch_A_star").setAttribute("disabled", "disabled");
