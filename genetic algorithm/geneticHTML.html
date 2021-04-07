@@ -6,12 +6,23 @@
     <link rel="stylesheet" href="geneticCSS.css">
 </head>
 <body>
+    <div id="logo">
+        <h2>Генетический алгоритм</h2>
+    </div>
+
+    <div id="pointsCounter">
+        <p id="text">Количество расставленных точек</p>
+        <div id="counterWindow">0</div>
+    </div>
+    <div id="minDist">
+        <p id="text">Текущая минимальная дистанция</p>
+        <div id="distWindow">-</div>
+    </div>
     <div id="options">
-        <h2>ГЕНЕТИЧЕСКИЙ АЛГОРИТМ</h2>
-        <input id="add" type="button" value="Добавить вершину"><br><br>
-        <input id="del" type="button" value="Удалить вершину"><br><br>
-        <input id="delAll" type="button" value="Удалить всё"><br><br>
-        <input id="algorithm" type="button" value="Запустить алгоритм">
+        <input class="buttons" type="button" id="add" value="Добавить вершину">
+        <input class="buttons" type="button" id="del" value="Удалить вершину">
+        <input class="buttons" type="button" id="delAll" value="Удалить всё">
+        <input class="buttons" type="button" id="algorithm" value="Запустить алгоритм">
     </div>
     <div id="window">
         <canvas></canvas>

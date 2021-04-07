@@ -1,5 +1,13 @@
 "use strict"
 
+function displayCounter(counter) {
+    document.getElementById('counterWindow').innerText = counter;
+}
+
+function displayDistance(distance) {
+    document.getElementById('distWindow').innerText = distance;
+}
+
 var counter = 0;
 var listOfNodes = [];
 
@@ -20,10 +28,11 @@ function structOfNodes(id, x, y) {
 document.getElementById('add').onclick = function() {
     document.getElementById('window').onclick = function(event) {
         clearCanvas();
+        displayDistance('-');
 
         let coordinates = {
-            x: event.clientX - 379,
-            y: event.clientY  - 73
+            x: event.clientX - 392,
+            y: event.clientY  - 113
         };
 
         let element = document.createElement('div');
@@ -39,33 +48,36 @@ document.getElementById('add').onclick = function() {
         addToList(newElementToList);
 
         counter++;
+        displayCounter(counter);
     }
 }
 
 // кнопка удаления вершин определённых в графе
 document.getElementById('del').onclick = function() {
     document.getElementById('window').onclick = function(event) {
-        clearCanvas();
+        if (event.target.className == "node") {
+            clearCanvas();
+            displayDistance('-');
 
-        let numberOfPoint = event.target.id;
-        let toDelete = document.getElementById(`${numberOfPoint}`);
-        toDelete.parentNode.removeChild(toDelete);
-        let class_ = document.getElementsByClassName('node');
-        let flag = false;
-        counter--;
-        if (toDelete.id == listOfNodes.length-1) {
-            listOfNodes.pop();
-        } else {
-            for (let i = 0; i < counter; i++) {
-                class_[i].id = `${i}`;
-                if (listOfNodes[i].id == toDelete.id && !flag) {
-                    console.log(i);
-                    listOfNodes.splice(i,1);
-                    console.log(listOfNodes);
-                    flag = true;
-                } 
-                if (flag && i != counter) {
-                    listOfNodes[i].id--;
+            let numberOfPoint = event.target.id;
+            let toDelete = document.getElementById(`${numberOfPoint}`);
+            toDelete.parentNode.removeChild(toDelete);
+            let class_ = document.getElementsByClassName('node');
+            let flag = false;
+            counter--;
+            displayCounter(counter);
+            if (toDelete.id == listOfNodes.length-1) {
+                listOfNodes.pop();
+            } else {
+                for (let i = 0; i < counter; i++) {
+                    class_[i].id = `${i}`;
+                    if (listOfNodes[i].id == toDelete.id && !flag) {
+                        listOfNodes.splice(i,1);
+                        flag = true;
+                    } 
+                    if (flag && i != counter) {
+                        listOfNodes[i].id--;
+                    }
                 }
             }
         }
@@ -80,6 +92,8 @@ document.getElementById('delAll').onclick = function() {
         listOfNodes.pop();
     }
     counter = 0;
+    displayCounter(counter);
+    displayDistance('-');
 }
 
 // кнопка запуска алгоритма
@@ -149,7 +163,7 @@ function generateRandPath(n) {
         way[i] = i;
     } 
 
-    for (let i=0; i<n; i++)
+    for (let i=0; i<100; i++)
     {
         way.sort(() => Math.random()-0.5);
     }
@@ -175,11 +189,11 @@ function weightOfPathIs(nodes, path) {
 
 // скрещивание двух генов
 function crossover(array1, array2) {
-    let firstPoint = Math.floor(Math.random() * (array1.length - 1) + 1);
+    let firstPoint = Math.floor(Math.random() * (array1.length-1)+1);
     let lastPoint;
 
     do {
-        Math.floor(Math.random() * (array1.length - firstPoint) + firstPoint)
+        Math.floor(Math.random() * (array1.length-firstPoint)+firstPoint)
     } while (lastPoint == firstPoint)
 
     let newArray1 = array1.slice(firstPoint, lastPoint); 
@@ -197,19 +211,21 @@ function crossover(array1, array2) {
 }
 
 // мутация гена
-function mutation(array, rate) {
-    for (let i=0; i< array.length; i++) {
-        if (Math.random() < rate) {
-            let indexFirst = Math.floor(Math.random() * (array.length-1-1)+1);
-            let indexSecond = Math.floor(Math.random() * (array.length-1-1)+1);
-            let tmp = array[indexFirst];
-            array[indexFirst] = array[indexSecond];
-            array[indexSecond] = tmp;
-        }
-    }
+function mutation(array) {
+
+    let indexFirst = Math.floor(Math.random() * (array.length-2));
+    let indexSecond;
+    
+    indexSecond = Math.floor(Math.random() * (array.length-2  - (indexFirst+1)) + (indexFirst+1));
+
+    let tmp = array[indexFirst];
+    array[indexFirst] = array[indexSecond];
+    array[indexSecond] = tmp;
+
     array[array.length-1] = array[0];
     return array;
 }
+
 
 // итерация выполнения алгоритма
 function iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGeneration, lastBestGene) {
@@ -222,7 +238,7 @@ function iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGener
             let parentSecond = population[j].path;
 
             let child = crossover(parentFirst, parentSecond);
-            child = mutation(child, 0.05);
+            child = mutation(child);
             let childWeight = weightOfPathIs(nodes, child);
 
             let newGeneFirst = new structOfGen(child, childWeight);
@@ -249,13 +265,13 @@ function iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGener
         lastBestGene = numOfGeneration;
         clearCanvas();
         drawLines(bestGeneEver.path, false);
-        console.log(bestGeneEver);
+        displayDistance(bestGeneEver.weight);
 
-        if (numOfGeneration - lastBestGene <= 500) {
+        if (numOfGeneration - lastBestGene <= 1000) {
             setTimeout(() => iteration(population, bestGeneEver, sizeOfPopulation, nodes, 
-                numOfGeneration+1, lastBestGene), 100);
+                numOfGeneration+1, lastBestGene), 10);
         }
-    } else if (numOfGeneration - lastBestGene <= 500) {
+    } else if (numOfGeneration - lastBestGene <= 1000) {
         iteration(population, bestGeneEver, sizeOfPopulation, nodes, 
             numOfGeneration+1, lastBestGene);
     } else {
@@ -291,12 +307,12 @@ function drawLines(bestGene, flag) {
         context.strokeStyle = '#b50000';
     }
     context.lineWidth = 3;
+    context.lineCap = "square";
     context.stroke();
 }
 
 function travellingSalesmanProblem(nodes) {
     let numOfGeneration = 1; // счётчик поколений
-    //let maxNumOfGenerations = 2000; // максимальное количество поколений
 
     let bestGeneEver = new structOfGen([], Number.MAX_SAFE_INTEGER);
     
@@ -318,9 +334,13 @@ function travellingSalesmanProblem(nodes) {
     clearCanvas();
     if (nodes.length > 2) {
         drawLines(bestGeneEver.path, false);
+        displayDistance(bestGeneEver.weight);
     } else {
         drawLines(bestGeneEver.path, true);
+        displayDistance(bestGeneEver.weight);
     }
 
-    iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGeneration, lastBestGene);
+    if (nodes.length > 2) { 
+        iteration(population, bestGeneEver, sizeOfPopulation, nodes, numOfGeneration, lastBestGene) 
+    };
 }
