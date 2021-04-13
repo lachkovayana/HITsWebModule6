@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Genetic algorithm</title>
+    <link rel="stylesheet" href="GeneticAlg.css" />
+  </head>
+  <body>
+    <div class="nav__bar">
+      <a href="#" class="nav__trigger">
+        <div class="bars"></div>
+      </a>
+    </div>
+    <div class="mainPart">
+      <div class="part1">
+        <h1 id="logo">№3. Генетический алгоритм</h1>
+        <div id="Counters">
+          <p class="text">Количество расставленных точек</p>
+          <div id="counterWindow">0</div>
+          <br />
+          <p class="text">Текущая минимальная дистанция</p>
+          <div id="distWindow">-</div>
+        </div>
+        <div class="buttons">
+          <button id="add" class="blob-btn" >
+            Добавить вершину
+            <span class="blob-btn__inner">
+              <span class="blob-btn__blobs">
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+              </span>
+            </span></button>
+          <button id="del" class="blob-btn" >
+            Удалить вершину
+            <span class="blob-btn__inner">
+              <span class="blob-btn__blobs">
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+              </span>
+            </span>
+          </button>
+          <button id="delAll" class="blob-btn">
+            Удалить всё
+            <span class="blob-btn__inner">
+              <span class="blob-btn__blobs">
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+              </span>
+            </span>
+          </button>
+          <button id="algorithm" class="blob-btn">
+            Запустить алгоритм
+            <span class="blob-btn__inner">
+              <span class="blob-btn__blobs">
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div id="window" class="part2">
+        <canvas></canvas>
+      </div>
+    </div>
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item"><a href="/HITsWebModule6/MainPage.html">Главное меню</a></li>
+        <li class="nav__item"><a href="/HITsWebModule6/A_star/A_star.html">Алгоритм А*</a></li>
+        <li class="nav__item"><a href="#">Муравьиный алгоритм</a></li>
+        <li class="nav__item"><a href="#">Алгоритм кластеризации</a></li>
+        <li class="nav__item"><a href="#">Нейронная сеть</a></li>
+        <li class="nav__item"><a href="#">Дерево решений</a></li>
+      </ul>
+    </nav>
+    <script src="GeneticAlg.js"></script>
+  </body>
+</html>
