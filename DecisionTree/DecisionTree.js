@@ -252,7 +252,10 @@ function buildTree(level, rows) {
     true_rows: resultRows.true_rows,
     false_rows: resultRows.false_rows,
   };
-  if(BranchesObject.true_rows.length == 0 || BranchesObject.false_rows.length == 0){
+  if (
+    BranchesObject.true_rows.length == 0 ||
+    BranchesObject.false_rows.length == 0
+  ) {
     return new createLeaf(level, rows);
   }
   let trueBranch = buildTree(level, BranchesObject.true_rows);
@@ -400,15 +403,10 @@ function prediction(labelAttribute) {
   let currentNode = tree;
   IDaddition = "";
   while (true) {
-    console.log(document.getElementById(`treeID_${IDaddition}_span`));
     if (labelAttribute == "clear") {
-      document
-        .getElementById(`treeID_${IDaddition}_span`)
-        .setAttribute("style", "background-color: #ebebebb9");
+      document.getElementById(`treeID_${IDaddition}_span`).setAttribute("style", "background-color: #ebebebb9");
     } else {
-      document
-        .getElementById(`treeID_${IDaddition}_span`)
-        .setAttribute("style", "background-color:#0fe0f5");
+      document.getElementById(`treeID_${IDaddition}_span`).setAttribute("style", "background-color:#0fe0f5"); 
     }
     if (currentNode.type == "leaf") {
       return;
@@ -641,7 +639,6 @@ navigation.init();
 //   return;
 // }
 
-
 // function printTree2(node, spacing) {
 //   if (node.type == "leaf") {
 //     console.log(spacing + "prediction:", node.data);
@@ -650,11 +647,10 @@ navigation.init();
 //     console.log(spacing + node.question.expression);
 //     spacing += "   ";
 //     console.log(spacing + "-->true:");
-//     printTree2(node.trueBranch, spacing, ); 
-//     console.log(spacing + "-->false:"); 
+//     printTree2(node.trueBranch, spacing, );
+//     console.log(spacing + "-->false:");
 //     printTree2(node.falseBranch, spacing);
 //   }
 // }
-
 
 /////////////////////////////////// дерево ///////////////////////////

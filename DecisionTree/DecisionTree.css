@@ -8,17 +8,18 @@ input, textarea, select, option{
 .part3{
   margin-left: auto;
   margin-right: auto;
-  margin-top: 0px;
 }
 
-.part1 {
+/* .part1 {
   flex-basis: 47%;
   margin-left: 50px;
 }
 .part2{
-  flex-basis: 47%;
+  flex-basis: 40%;
   margin-top: 75px;
-}
+  margin-left: 50px;
+
+} */
 
 #treeID,
 #treeID ul,
@@ -134,16 +135,15 @@ body.is-froze {
   height: 100%;
 }
 .mainPart {
-  min-height: 735px;
   display: flex;
-  text-align: center;
   flex-wrap: wrap;
   position: absolute;
-  margin-left: 50px;
-  height: 100%;
+  width: calc(100% - 70px);
+  margin-left: 58px;
+  overflow: hidden;
+  height: 100vh;
   background: linear-gradient(40deg, #000000, #8d7b94);
   transition: 0.55s cubic-bezier(0.645, 0.045, 0.355, 1);
-  /* will-change: width, height, opacity, transform; */
   z-index: 1;
 }
 .mainPart.is-active {
@@ -158,6 +158,19 @@ body.is-froze {
   .mainPart.is-active {
     transform: scale(0.9) translate3d(40%, 0, 0);
   }
+}
+.mainPart.is-transition-out {
+  clip-path: inset(0 0 0 100%);
+}
+.part1 {
+  margin-left: 70px;
+  text-align: center;
+  flex-basis: 47%;
+}
+.part2{
+  text-align: center;
+  flex-basis: 47%;
+  margin-top: 70px;
 }
 
 .nav__bar {
@@ -396,4 +409,11 @@ body.is-froze {
   .blob-btn:hover .blob-btn__blob {
     transform: translateZ(0) scale(1.7);
   }
+}
+
+.bluecolor{
+  background-color: #0fe0f5;
+}
+.graycolor{
+  background-color: #ebebebb9;
 }
