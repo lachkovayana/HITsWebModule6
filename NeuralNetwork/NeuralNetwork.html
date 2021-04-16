@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Neural network</title>
+    <link rel="stylesheet" href="NeuralNetwork.css" />
+    <link rel="stylesheet" href="/HITsWebModule6/design.css" />
+  </head>
+  <body>
+    <div class="nav__bar">
+      <a href="#" class="nav__trigger">
+        <div class="bars"></div>
+      </a>
+    </div>
+    <div class="mainPart">
+      <div class="part1">
+        <h1>№6. Нейронная сеть</h1>
+        <div class="menu">
+          <label for="color">Выберите цвет:</label>
+          <input type="color" class="color" value="#00eaff" />
+          <br>
+          <label for="control_panel_thickness">Выберите толщину: </label>
+          <select id="control_panel_thickness">
+            <option value="1">Средняя</option>
+            <option value="2">Максимальная</option>
+            <option value="3">Минимальная</option>
+          </select>
+        </div>
+
+        <div class="buttons">
+          <button onclick="clearCanvas()" class="blob-btn">
+            Очистить Canvas
+            <span class="blob-btn__inner">
+              <span class="blob-btn__blobs">
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+                <span class="blob-btn__blob"></span>
+              </span>
+            </span>
+          </button>
+        </div>
+        <div id="output">Нарисуйте цифру </div>
+      </div>
+      <div class="part2">
+        <div class="CanvasContainer">
+          <canvas
+            style="height: 500px; width: 500px"
+            id="drawingCanvas"
+            width="50px"
+            height="50px"
+          ></canvas>
+        </div>
+        <canvas
+          style="display: none"
+          id="canvas"
+          width="28px"
+          height="28px"
+        ></canvas>
+        <div style="display: none" id="pic_cntr"></div>
+        <br />
+      </div>
+    </div>
+
+    <nav class="nav">
+      <ul class="nav__list">
+        <li ><a href="/HITsWebModule6/MainPage/MainPage.html">Главное меню</a></li>
+        <li><a href="/HITsWebModule6/A_star/A_star.html">Алгоритм A*</a></li>
+        <li><a href="/HITsWebModule6/Klast/Klast.html">Алгоритм кластеризации</a></li>
+        <li><a href="/HITsWebModule6/GeneticAlg/GeneticAlg.html">Генетический алгоритм</a></li>
+        <li><a href="">Муравьиный алгоритм</a></li>
+        <li><a href="/HITsWebModule6/DecisionTree/DecisionTree.html">Дерево решений</a></li>
+      </ul>
+    </nav>
+    <script src="/HITsWebModule6/design.js"></script>
+    <script src="Canv.js"></script>
+    <script src="weights.js"></script>
+    <script src="algo.js"></script>
+  </body>
+</html>
