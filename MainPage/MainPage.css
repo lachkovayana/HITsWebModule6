@@ -65,6 +65,8 @@ body {
   margin: 0; */
   width: 30%;
   margin-left:-170px;
+  margin-top: 20px;
+  margin-bottom: 0px;
   text-transform: uppercase;
 
 }
@@ -95,11 +97,10 @@ a {
 .algorithm-name {
   margin: 0;
   margin-top: 18px;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   font-family:'Courier New', Courier, monospace;
   letter-spacing: 0.05em;
-  /* color: rgb(189, 188, 188); */
   color: #c6c7f3;
   
 }

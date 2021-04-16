@@ -31,7 +31,7 @@ document.getElementById("add").onclick = function () {
     displayDistance("-");
 
     let coordinates = {
-      x: event.clientX -805,
+      x: event.clientX - 790,
       y: event.clientY - 37,
     };
 
@@ -307,8 +307,8 @@ function iteration(
 function drawLines(bestGene, flag) {
   let size = bestGene.length;
   let startPoint = {
-    x: parseInt(document.getElementById(`${bestGene[0]}`).style.left) +5,
-    y: parseInt(document.getElementById(`${bestGene[0]}`).style.top) +7,
+    x: parseInt(document.getElementById(`${bestGene[0]}`).style.left) + 5,
+    y: parseInt(document.getElementById(`${bestGene[0]}`).style.top) + 7,
   };
 
   context.beginPath();
@@ -316,7 +316,7 @@ function drawLines(bestGene, flag) {
 
   for (let i = 1; i < size; i++) {
     let nextPoint = {
-      x: parseInt(document.getElementById(`${bestGene[i]}`).style.left) +5 ,
+      x: parseInt(document.getElementById(`${bestGene[i]}`).style.left) + 5,
       y: parseInt(document.getElementById(`${bestGene[i]}`).style.top) + 7,
     };
     context.lineTo(nextPoint.x, nextPoint.y);
@@ -327,7 +327,7 @@ function drawLines(bestGene, flag) {
   } else {
     context.strokeStyle = "#7d87a8";
   }
-  
+
   context.lineWidth = 3;
   context.lineCap = "square";
   context.stroke();
