@@ -5,22 +5,6 @@ input, textarea, select, option{
   background-color: #ebebebb9;
 }
 
-.part3{
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* .part1 {
-  flex-basis: 47%;
-  margin-left: 50px;
-}
-.part2{
-  flex-basis: 40%;
-  margin-top: 75px;
-  margin-left: 50px;
-
-} */
-
 #treeID,
 #treeID ul,
 #treeID li {
@@ -109,9 +93,6 @@ input, textarea, select, option{
 
 }
 
-
-
-
 body{
   margin:0;
 }
@@ -167,13 +148,18 @@ body.is-froze {
   margin-left: 70px;
   text-align: center;
   flex-basis: 47%;
+  height: 100vh;
 }
 .part2{
   text-align: center;
   flex-basis: 47%;
   margin-top: 70px;
+  height: 100vh;
 }
-
+.part3{
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .bluecolor{
   background-color: #0fe0f5;

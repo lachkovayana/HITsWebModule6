@@ -77,9 +77,11 @@ body.is-froze {
 .part1 {
   text-align: center;
   flex-basis: 47%;
+  height: 100vh;
 }
 .part2 {
   text-align: center;
   flex-basis: 47%;
   margin-top: 20px;
+  height: 100vh;
 }
