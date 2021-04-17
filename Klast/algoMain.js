@@ -1,39 +1,5 @@
 let points = [];
 
-function clustWithoutK(){
-    let ChoseW = [clustWithK(1)];
-    let MaxCount = 12;
-    let maxAttitude, clustersCount;
-
-    for (let i = 2; i < MaxCount; ++i){
-        ChoseW.push(clustWithK(i));
-        let Attitude = ChoseW[i-2] / ChoseW[i-1];
-        if (Attitude > maxAttitude || maxAttitude == null){
-            maxAttitude = Attitude;
-            clustersCount = i;
-        }
-    }
-
-    clustWithK(clustersCount);
-}
-
-
-function clustWithK(clustersCount) {
-    let centers = generateKCenters(clustersCount),minCenters = centers;
-    let numOfW = clustWithoutKStep(centers),WMin = numOfW;
-    for(let i = 0; i < 50; ++i){
-        centers = generateKCenters(clustersCount);
-        numOfW = clustWithoutKStep(centers);
-        if(numOfW < WMin){
-            WMin = numOfW;
-            minCenters = centers;
-        }
-    }
-    clustWithoutKStep(minCenters);
-    
-    return WMin;
-}
-
 function generateKCenters(centersCount){
     let centers = [];
     for(let i = 0; i < centersCount; ++i){
@@ -95,7 +61,44 @@ function findBestCluster(point, clusters,findDist){
     minCluster.points.push(point);
     point.color = minCluster.center.color;
 
-    return Math.pow(minDist, 2);
+    // return Math.pow(minDist, 2);
+    return minDist;
+}
+
+
+
+function clustWithoutK(){
+    let ChoseW = [clustWithK(1)];
+    let MaxCount = 12;
+    let maxAttitude, clustersCount;
+
+    for (let i = 2; i < MaxCount; ++i){
+        ChoseW.push(clustWithK(i));
+        let Attitude = ChoseW[i-2] / ChoseW[i-1];
+        if (Attitude > maxAttitude || maxAttitude == null){
+            maxAttitude = Attitude;
+            clustersCount = i;
+        }
+    }
+
+    clustWithK(clustersCount);
+}
+
+
+function clustWithK(clustersCount) {
+    let centers = generateKCenters(clustersCount),minCenters = centers;
+    let numOfW = clustWithoutKStep(centers),WMin = numOfW;
+    for(let i = 0; i < 50; ++i){
+        centers = generateKCenters(clustersCount);
+        numOfW = clustWithoutKStep(centers);
+        if(numOfW < WMin){
+            WMin = numOfW;
+            minCenters = centers;
+        }
+    }
+    clustWithoutKStep(minCenters);
+    
+    return WMin;
 }
 
 function calculateCenters(clusters){
