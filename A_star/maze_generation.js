@@ -674,7 +674,7 @@ function a_star() {
         if (currentPoint !== undefined && currentPoint!=beginPoint) {
             queueForAnimationX.add(currentPoint.x);
             queueForAnimationY.add(currentPoint.y);
-            setTimeout(function () {
+            timeout = setTimeout(function () {// newSwag
                 map[queueForAnimationX.peek()][queueForAnimationY.peek()].htmlObject.classList.remove("currentPoint");
                 map[queueForAnimationX.dequeue()][queueForAnimationY.dequeue()].htmlObject.classList.add("notWall");
             }, timeCounter * movementSpeed);
@@ -683,7 +683,7 @@ function a_star() {
         currentPoint = openList.removeRoot();
         queueForAnimationX.add(currentPoint.x);
         queueForAnimationY.add(currentPoint.y);
-        setTimeout(function () {
+        timeout = setTimeout(function () { // newSwag
             map[queueForAnimationX.peek()][queueForAnimationY.peek()].htmlObject.classList.remove("consideredPoint");
             map[queueForAnimationX.dequeue()][queueForAnimationY.dequeue()].htmlObject.classList.add("currentPoint");
         }, timeCounter * movementSpeed);
@@ -730,7 +730,7 @@ function a_star() {
                         openList.add(map[cx + i][cy + j]);
                         queueForAnimationX.add(cx + i);
                         queueForAnimationY.add(cy + j);
-                        setTimeout(function () {
+                        timeout = setTimeout(function () { // newSwag
                             map[queueForAnimationX.peek()][queueForAnimationY.peek()].htmlObject.classList.remove("notWall");
                             map[queueForAnimationX.dequeue()][queueForAnimationY.dequeue()].htmlObject.classList.add("consideredPoint");
                         }, timeCounter * movementSpeed);
@@ -741,8 +741,10 @@ function a_star() {
             }
         }
     }
+    clearInterval(timeout) // newSwag
     return false;
 }
+let timeout ;// newSwag
 function cleanMap() {
     
     let openListSize = openList.size();

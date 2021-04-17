@@ -274,7 +274,7 @@ function iteration(
     displayDistance(bestGeneEver.weight);
 
     if (numOfGeneration - lastBestGene <= 1000) {
-      setTimeout(
+      timeout = setTimeout( // new Swag
         () =>
           iteration(
             population,
@@ -301,10 +301,12 @@ function iteration(
     drawLines(bestGeneEver.path, true);
     return;
   }
+ 
 }
-
+let timeout; // new Swag
 // прорисовка рёбер
 function drawLines(bestGene, flag) {
+  clearInterval(timeout); // new Swag
   let size = bestGene.length;
   let startPoint = {
     x: parseInt(document.getElementById(`${bestGene[0]}`).style.left) + 5,
